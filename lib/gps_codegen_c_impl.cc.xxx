@@ -330,7 +330,7 @@ namespace gr {
 		{
 			code_sel = (int) ((code_phase + (1L << 39)) >> 40 );
 
-			if(datagen_mode >= 1)
+			if(datagen_mode == 1)
 				out[i] = ( (gr_complex)(((float)random_data[21] - 0.5f) * 2.0f) ) * code_LUT[code_sel];
 			else
 				out[i] = code_LUT[code_sel];
@@ -341,15 +341,12 @@ namespace gr {
 
 			if( code_phase >=  limit)
 			{
-				if(datagen_mode >= 1)
+				if(datagen_mode == 1)
 				{
 					if(data_counter == 20)
 					{
 						data_counter = 1;
-						if(datagen_mode == 2)
-							random_data[21] = 1 - radom_data[21];
-						else
-							advance_random_data();
+						advance_random_data();
 					}
 					else
 						data_counter++;

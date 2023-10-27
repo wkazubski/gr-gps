@@ -22,9 +22,10 @@ FIND_LIBRARY(
           /usr/local/lib64
           /usr/lib
           /usr/lib64
-)
+          )
+
+include("${CMAKE_CURRENT_LIST_DIR}/gpsTarget.cmake")
 
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(GPS DEFAULT_MSG GPS_LIBRARIES GPS_INCLUDE_DIRS)
 MARK_AS_ADVANCED(GPS_LIBRARIES GPS_INCLUDE_DIRS)
-

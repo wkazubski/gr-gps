@@ -36,7 +36,7 @@ if(NOT gps_sources)
 endif(NOT gps_sources)
 
 add_library(gnuradio-gps SHARED ${gps_sources})
-target_link_libraries(gnuradio-gps gnuradio::gnuradio-runtime)
+target_link_libraries(gnuradio-gps gnuradio::gnuradio-runtime gnuradio::gnuradio-fft)
 target_include_directories(gnuradio-gps
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     PUBLIC $<INSTALL_INTERFACE:include>

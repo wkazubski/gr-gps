@@ -25,7 +25,6 @@
 #include <pthread.h>
 #include <string.h>
 
-
 #include <gnuradio/io_signature.h>
 #include <gnuradio/blocks/control_loop.h>
 #include <gnuradio/expj.h>
@@ -34,9 +33,6 @@
 #include "gps_despread_impl.h"
 
 #define DEBUG_OUT
-
-
-
 
 namespace gr {
   namespace gps {
@@ -81,15 +77,12 @@ namespace gr {
                 code_ix = code_ix - l;
             }
 
-            out[i] = in[i] * c[code_ix];        
+            out[i] = in[i] * c[code_ix];
         }
-
     }
 
     void *search_worker(void *s)
     {
-
-
         int d = 0;
         int f = 0;
         int i;
@@ -98,7 +91,7 @@ namespace gr {
 
         search_data->best_delay = 0;
         search_data->snr = -1;
-        search_data->best_freq = 0;    
+        search_data->best_freq = 0;
         search_data->running = 1;
 
         int data_len = search_data->data_len;
@@ -127,26 +120,20 @@ namespace gr {
 
         fft_c->execute();
 
-
         for(i = 0; i < data_len; ++i)
         {
             code_fft_conj[i] = conj(output_buffer[i]);
             input_buffer[i] = search_data->data[i];
         }
 
-
         fft_c->execute();
-
 
         for(i = 0; i < data_len ; ++i)
         {
             input_data_fft[i] = output_buffer[i];
         }
 
-
         float freq_step = 1000.0f;
-
-
 
         input_buffer = ifft_c->get_inbuf();
         output_buffer = ifft_c->get_outbuf();
@@ -165,7 +152,6 @@ namespace gr {
 
             max_abs(output_buffer, data_len, peak, peak_offset, snr);
 
-
             printf("i: %d, peak: %f , peak_offset: %d, snr: %f\n", i, peak, peak_offset, snr);
             if(peak > best_power)
             {                
@@ -176,11 +162,10 @@ namespace gr {
             }
         }
 
-
         printf("search:: best_freq: %f, best_delay: %d\n", search_data->best_freq, osr_int*1023-search_data->best_delay );
 
         delete fft_c;
-        delete ifft_c;        
+        delete ifft_c;
 
         delete code_fft_conj;
         delete input_data_fft;
@@ -190,7 +175,6 @@ namespace gr {
 
         pthread_exit(NULL);
     }
-
 
     gps_despread::sptr
     gps_despread::make(int code_sel, int osr_in)
@@ -228,13 +212,12 @@ namespace gr {
         // state machine
         fsm = state_start_search;
 
-        // code tracking        
+        // code tracking
         for(i = 0; i < 5 ; ++i)
             track_integrator[i] = 0;
         track_counter = 0;
         track_mode = 1;
         lockdet_counter = 0;
-
 
         // buffers for FFT fine frequency correction
 
@@ -249,8 +232,6 @@ namespace gr {
         freq_Nsamples = FREQ_SAMPLING_RATE;
         fix_done = 0;
 
-
-
         search_avg_selection = 0;
 
         // frequency tracking loop
@@ -260,11 +241,8 @@ namespace gr {
         lf_pole_d = 0;
         freqerror_trunc_d = 0;
 
-
         nco_phase = 0;
     }
-
-
 
     /*
      * Our virtual destructor.
@@ -273,7 +251,6 @@ namespace gr {
     {
 
     }
-
 
     void gps_despread_impl::set_delay(int d)
     {
@@ -339,7 +316,6 @@ namespace gr {
         }
     }
 
-
     void
     gps_despread_impl::update_pll(float freqerror)
     {
@@ -391,9 +367,9 @@ namespace gr {
 
         lf_int = lf_int + (lf_pole_d - lf_zero_d + phase_error)/512.0f / 2000.0; // type-II mode
         //lf_int = (lf_pole_d - lf_zero_d + phase_error)/512.0f / 2000.0; // type-I mode
-        lf_pole_d =  Kp * (lf_pole_d - lf_zero_d + phase_error);         
+        lf_pole_d =  Kp * (lf_pole_d - lf_zero_d + phase_error);
         lf_zero_d = Kz * phase_error; // type-II mode
-        //lf_zero_d = 0; // type-I mode        
+        //lf_zero_d = 0; // type-I mode
 
         nco_freq = lf_int;
 
@@ -450,13 +426,12 @@ namespace gr {
                 if(code_index_track < 0)
                     code_index_track += 1023;
 
-
                 track_integrator[j + 2] += nco * in[i] * code_LUT[code_index_track][code_selection - 1]; 
             }
 
             // LO freq error correction
             //
-            // [despread]---->[lowpass]---->[freq sampling]            
+            // [despread]---->[lowpass]---->[freq sampling]
 
             float a1 = 0.996933745203311f;
             float b0 = 0.00153312739834435f;
@@ -487,12 +462,8 @@ namespace gr {
                     freq_corr_integrator_filtered[j] = freq_corr_integrator_filtered[j] * a1 
                                                      + freq_corr_integrator[j] * b0 + freq_corr_integrator_d[j] * b1;
                     freq_corr_integrator_d[j] = freq_corr_integrator[j];
-
-
                 }
             }
-
-
 
             // code wrapped around -> sample ready
             if( (code_counter + delay_selection) == (osr_int * 1023 - 1) )
@@ -512,7 +483,7 @@ namespace gr {
                 }
 
                 // code tracking
-                if(track_counter % 4 == 0)                
+                if(track_counter % 4 == 0)
                 {
                     int best_ix;
                     float best_power;
@@ -532,9 +503,7 @@ namespace gr {
 
                     for(int j = 0; j < 5 ; ++j)
                         track_integrator[j] = 0; 
-
                 }
-
             }
 
             // This counter is our reference point for the delay selection.
@@ -575,8 +544,6 @@ namespace gr {
                 track(in, out, noutput_items, noutputs);
                 break;
 
-
-
             case state_wait_search:
                 // keep the sample counter in sync while waiting for results.
                 // consume samples to 
@@ -589,7 +556,7 @@ namespace gr {
                     else
                         code_counter++;
 
-                }    
+                }
                 consume_each( noutput_items*1023*osr_int    );
 
                 if(search_data.done)
@@ -599,14 +566,13 @@ namespace gr {
 
                     float threshold = 4.0f;
 
-                    if(abs(search_data.snr) > threshold)    
+                    if(abs(search_data.snr) > threshold)
                     {
                         // satellite found. start tracking
 
                         set_freq(search_data.best_freq);
                         set_delay(osr_int * 1023 - search_data.best_delay);
                         //set_delay(search_data.best_delay);
-
 
                         fsm = state_track;
                     }
@@ -616,15 +582,12 @@ namespace gr {
 
                         fsm = state_start_search;
                     }
-
                 }
 
                 break;
 
-
             case state_start_search:
             default:
-
 
                 // launch search 
                 if(!search_data.running)
@@ -638,15 +601,14 @@ namespace gr {
                         lf_pole_d = 0;
                         nco_freq = 0;
 
-
                         for(int i = 0; i < freq_Nsamples ; ++i)
                         {
                             freq_corr_integrator[i] = 0;
                             freq_corr_integrator_d[i] = 0;
                             freq_corr_integrator_filtered[i] = 0;
                         }
-                        freq_corr_integrator_filtered_d = 0;
 
+                        freq_corr_integrator_filtered_d = 0;
 
                         // reset code tracking integrators
                         for(int i = 0; i < 5 ; ++i)
@@ -657,26 +619,23 @@ namespace gr {
 
                         search_data.done = 0;
 
-
                         search_data.data = new gr_complex[1023 * osr_int];
                         for(int i = 0; i < 1023*osr_int ; ++i)
                             search_data.data[i] = in[i];
 
                         consume_each(1023 * osr_int);
-
                     }
                     else
                     {
                         for(int i = 0; i < 1023*osr_int ; ++i)
                             search_data.data[i] = in[i];
                         consume_each(1023 * osr_int);
-
                     }
 
                     printf("%d ", search_acq_counter);
 
                     if(++search_acq_counter == 1)
-                    {    
+                    {
                         printf("\n");
 
                         search_data.code_LUT = new gr_complex[1023];
@@ -689,23 +648,21 @@ namespace gr {
                         search_data.freq_search_Nsteps = freq_search_Nsteps;
 
                         pthread_create(&search_thread, NULL, search_worker, (void *) &search_data);
-    
+
                         search_acq_counter = 0;
                         fsm = state_wait_search;
                     }
-
                 }
                 else
                 {
                     fsm = state_wait_search;
                 }
 
-                break;        
+                break;
         }
 
         return noutputs;
     }
-
 
     void gps_despread_impl::generate_codes()
     {
@@ -714,7 +671,7 @@ namespace gr {
         int c;
 
         for(c = 0; c < 32 ; ++c)
-        {        
+        {
             switch(c + 1) 
             {
                 case 1:
@@ -878,19 +835,16 @@ namespace gr {
                 break;
             }
 
-
             // calculate our code LUT
 
             char g0[10] = {1,1,1,1,1,1,1,1,1,1};
             char g1[10] = {1,1,1,1,1,1,1,1,1,1};
             char g1_out = 0;
 
-
             int i = 0, j = 0;
             for(i = 0 ; i < 1023 ; ++i)
             {
                 g1_out = g1[g1_tap0] ^ g1[g1_tap1];
-
 
                 code_LUT[i][c] = (gr_complex) (2.0 * ((g1_out ^ g0[9]) - 0.5));
                 //printf("%d ", g1_out ^ g0[9]);
@@ -912,11 +866,8 @@ namespace gr {
                         g1[j] = g1[j-1];
                     }
                 }
-
-
             }
         }
-
     }
 
   } /* namespace gps */

@@ -29,7 +29,6 @@ namespace gr {
     class gps_codegen_c_impl : public gps_codegen_c
     {
       private:
-
         gr_complex code_LUT[1023];
         long code_phase;
         long code_phase_increment;

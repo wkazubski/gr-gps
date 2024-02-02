@@ -64,7 +64,6 @@ namespace gr {
     class gps_despread_impl : public gps_despread
     {
       private:
-
         // code generator
         gr_complex code_LUT[1023][32];
         int code_selection;

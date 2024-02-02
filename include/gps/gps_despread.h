@@ -38,14 +38,12 @@ namespace gr {
      public:
       typedef boost::shared_ptr<gps_despread> sptr;
 
-
       virtual void set_delay(int) = 0;
       virtual int delay() const = 0;
       virtual int osr() const = 0;
       virtual void set_osr(int) = 0;
       virtual int code() const = 0;
       virtual void set_code(int) = 0;	
-
 
       /*!
        * \brief Return a shared_ptr to a new instance of gps::gps_despread.
@@ -62,4 +60,3 @@ namespace gr {
 } // namespace gr
 
 #endif /* INCLUDED_GPS_GPS_DESPREAD_H */
-

@@ -50,7 +50,6 @@ namespace gr {
 
         last2[0] = 0;
         last2[1] = 0;
-
     }
 
     /*
@@ -101,7 +100,6 @@ namespace gr {
         }
 
         return 0;
-
     }
 
     int
@@ -130,7 +128,6 @@ namespace gr {
         }
 
         return ok;
-
     }
 
     int
@@ -276,7 +273,6 @@ namespace gr {
                 default:
                     fsm = search_preamble;
             }
-
         }
 
         fflush(stdout);

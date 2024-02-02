@@ -47,8 +47,8 @@ namespace gr {
        * creating new instances.
        */
 
-	  virtual void set_code(int) = 0;
-	  virtual void set_datamode(int) = 0;
+      virtual void set_code(int) = 0;
+      virtual void set_datamode(int) = 0;
 
       static sptr make(float, int, int);
     };

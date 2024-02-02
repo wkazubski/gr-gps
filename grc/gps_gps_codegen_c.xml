@@ -10,9 +10,9 @@
        * name
        * key (makes the value accessible as $keyname, e.g. in the make node)
        * type -->
-	<callback>set_code(int($code))</callback>
-	<callback>set_datamode(int($code))</callback>
-	<callback>set_sample_rate($samplerate)</callback>
+  <callback>set_code(int($code))</callback>
+  <callback>set_datamode(int($code))</callback>
+  <callback>set_sample_rate($samplerate)</callback>
 
 
   <param>

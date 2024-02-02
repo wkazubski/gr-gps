@@ -249,7 +249,6 @@ namespace gr {
         char g1[10] = {1,1,1,1,1,1,1,1,1,1};
         char g1_out = 0;
 
-
         int i = 0, j = 0;
         for(i = 0 ; i < 1023 ; ++i)
         {
@@ -274,11 +273,7 @@ namespace gr {
                     g1[j] = g1[j-1];
                 }
             }
-
-
-
         }
-
     }
 
     void gps_codegen_c_impl::set_sample_rate(float samplerate)
@@ -310,9 +305,7 @@ namespace gr {
             {
                 random_data[i] = random_data[i-1];
             }
-
         }
-
     }
 
     int
@@ -353,7 +346,6 @@ namespace gr {
                 }
 
                 code_phase -= (1023L << 40);
-
             }
         }
 

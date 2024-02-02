@@ -53,4 +53,3 @@ namespace gr {
 } // namespace gr
 
 #endif /* INCLUDED_GPS_GPS_NAVDATA_H */
-

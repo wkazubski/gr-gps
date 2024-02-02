@@ -28,36 +28,35 @@ namespace gr {
 
     class gps_codegen_c_impl : public gps_codegen_c
     {
-     private:
+      private:
 
-		gr_complex code_LUT[1023];
-		long code_phase;
-		long code_phase_increment;
+        gr_complex code_LUT[1023];
+        long code_phase;
+        long code_phase_increment;
 
-		int code_selection;
-		int datagen_mode;
-		
-		char random_data[22];
-		int data_counter;
-		void advance_random_data();
+        int code_selection;
+        int datagen_mode;
 
-     public:
-		gps_codegen_c_impl(float, int, int);
-		~gps_codegen_c_impl();
+        char random_data[22];
+        int data_counter;
+        void advance_random_data();
 
-		void set_code(int);
-		void set_sample_rate(float);
+      public:
+        gps_codegen_c_impl(float, int, int);
+        ~gps_codegen_c_impl();
 
-		void set_datamode(int);
+        void set_code(int);
+        void set_sample_rate(float);
+
+        void set_datamode(int);
 
       // Where all the action really happens
-		int work(int noutput_items,
-	       gr_vector_const_void_star &input_items,
-	       gr_vector_void_star &output_items);
+        int work(int noutput_items,
+        gr_vector_const_void_star &input_items,
+        gr_vector_void_star &output_items);
     };
 
   } // namespace gps
 } // namespace gr
 
 #endif /* INCLUDED_GPS_GPS_CODEGEN_C_IMPL_H */
-
